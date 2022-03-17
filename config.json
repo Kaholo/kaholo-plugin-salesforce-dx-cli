@@ -1,0 +1,207 @@
+{
+  "name": "SalesForceSFDXCli",
+  "type": "executer",
+  "execProgram": "node",
+  "main": "app.js",
+  "imgUrl": "logo.png",
+  "version": "0.1.0",
+  "description": "Integration with SalesForce SFDX CLI.",
+  "category": "CRM",
+  "keywords": [
+    "salesforce",
+    "sales",
+    "force",
+    "CRM",
+    "crm",
+    "cli",
+    "sfdx",
+    "customer"
+  ],
+  "settings": [
+    {
+      "name": "username",
+      "viewName": "Username",
+      "type": "string",
+      "placeholder": "user@email.com",
+      "description": "User's email",
+      "required": true
+    },
+    {
+      "name": "consumerKey",
+      "viewName": "Consumer key",
+      "type": "vault",
+      "description": "Consumer Key of Connected Salesforce App",
+      "required": true
+    },
+    {
+      "name": "jwtKey",
+      "viewName": "JWT key",
+      "type": "vault",
+      "description": "JWT Secret file's content",
+      "required": true
+    },
+    {
+      "name": "sourceDirectory",
+      "viewName": "Source directory",
+      "type": "string",
+      "description": "Directory on the agent's disk where the project is located",
+      "required": true
+    },
+    {
+      "name": "instanceUrl",
+      "viewName": "Instance URL",
+      "type": "string",
+      "description": "Consumer Key of Connected Salesforce App"
+    },
+    {
+      "name": "testLevel",
+      "viewName": "Test level",
+      "description": "Tests' level to be run during the execution",
+      "type": "options",
+      "options": [
+        {
+          "id": "noTests",
+          "name": "No test run"
+        },
+        {
+          "id": "localTests",
+          "name": "Run local tests"
+        },
+        {
+          "id": "allTests",
+          "name": "Run all tests in org"
+        }
+      ]
+    }
+  ],
+  "methods": [
+    {
+      "name": "deploySource",
+      "viewName": "Deploy source",
+      "params": [
+        {
+          "name": "username",
+          "viewName": "Username",
+          "type": "string",
+          "placeholder": "user@email.com",
+          "description": "User's email",
+          "required": true
+        },
+        {
+          "name": "consumerKey",
+          "viewName": "Consumer key",
+          "type": "vault",
+          "description": "Consumer Key of Connected Salesforce App",
+          "required": true
+        },
+        {
+          "name": "jwtKey",
+          "viewName": "JWT key",
+          "type": "vault",
+          "description": "JWT Secret file's content",
+          "required": true
+        },
+        {
+          "name": "sourceDirectory",
+          "viewName": "Source directory",
+          "type": "string",
+          "description": "Directory on the agent's disk where the project is located",
+          "required": true
+        },
+        {
+          "name": "instanceUrl",
+          "viewName": "Instance URL",
+          "type": "string",
+          "description": "Consumer Key of Connected Salesforce App"
+        },
+        {
+          "name": "testLevel",
+          "viewName": "Test level",
+          "description": "Tests' level to be run during the execution",
+          "type": "options",
+          "options": [
+            {
+              "id": "noTests",
+              "name": "No test run"
+            },
+            {
+              "id": "localTests",
+              "name": "Run local tests"
+            },
+            {
+              "id": "allTests",
+              "name": "Run all tests in org"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "validateSource",
+      "viewName": "Validate source",
+      "params": [
+        {
+          "name": "deploySource",
+          "viewName": "Deploy source",
+          "params": [
+            {
+              "name": "username",
+              "viewName": "Username",
+              "type": "string",
+              "placeholder": "user@email.com",
+              "description": "User's email",
+              "required": true
+            },
+            {
+              "name": "consumerKey",
+              "viewName": "Consumer key",
+              "type": "vault",
+              "description": "Consumer Key of Connected Salesforce App",
+              "required": true
+            },
+            {
+              "name": "jwtKey",
+              "viewName": "JWT key",
+              "type": "vault",
+              "description": "JWT Secret file's content",
+              "required": true
+            },
+            {
+              "name": "sourceDirectory",
+              "viewName": "Source directory",
+              "type": "string",
+              "description": "Directory on the agent's disk where the project is located",
+              "required": true
+            },
+            {
+              "name": "instanceUrl",
+              "viewName": "Instance URL",
+              "type": "string",
+              "description": "Consumer Key of Connected Salesforce App"
+            },
+            {
+              "name": "testLevel",
+              "viewName": "Test level",
+              "description": "Tests' level to be run during the execution",
+              "type": "options",
+              "options": [
+                {
+                  "id": "noTests",
+                  "name": "No test run"
+                },
+                {
+                  "id": "localTests",
+                  "name": "Run local tests"
+                },
+                {
+                  "id": "allTests",
+                  "name": "Run all tests in org"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
