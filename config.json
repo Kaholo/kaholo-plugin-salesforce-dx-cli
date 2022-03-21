@@ -23,29 +23,25 @@
       "viewName": "Username",
       "type": "string",
       "placeholder": "user@email.com",
-      "description": "User's email",
-      "required": true
+      "description": "User's email"
     },
     {
       "name": "consumerKey",
       "viewName": "Consumer key",
       "type": "vault",
-      "description": "Consumer Key of Connected Salesforce App",
-      "required": true
+      "description": "Consumer Key of Connected Salesforce App"
     },
     {
       "name": "jwtKey",
       "viewName": "JWT key",
       "type": "vault",
-      "description": "JWT Secret file's content",
-      "required": true
+      "description": "JWT Secret file's content"
     },
     {
       "name": "sourceDirectory",
       "viewName": "Source directory",
       "type": "string",
-      "description": "Directory on the agent's disk where the project is located",
-      "required": true
+      "description": "Directory on the agent's disk where the project is located"
     },
     {
       "name": "instanceUrl",
@@ -76,8 +72,8 @@
   ],
   "methods": [
     {
-      "name": "deploySource",
-      "viewName": "Deploy source",
+      "name": "deployProject",
+      "viewName": "Deploy project",
       "params": [
         {
           "name": "username",
@@ -137,67 +133,61 @@
       ]
     },
     {
-      "name": "validateSource",
-      "viewName": "Validate source",
+      "name": "validateProject",
+      "viewName": "Validate project",
       "params": [
         {
-          "name": "deploySource",
-          "viewName": "Deploy source",
-          "params": [
+          "name": "username",
+          "viewName": "Username",
+          "type": "string",
+          "placeholder": "user@email.com",
+          "description": "User's email",
+          "required": true
+        },
+        {
+          "name": "consumerKey",
+          "viewName": "Consumer key",
+          "type": "vault",
+          "description": "Consumer Key of Connected Salesforce App",
+          "required": true
+        },
+        {
+          "name": "jwtKey",
+          "viewName": "JWT key",
+          "type": "vault",
+          "description": "JWT Secret file's content",
+          "required": true
+        },
+        {
+          "name": "sourceDirectory",
+          "viewName": "Source directory",
+          "type": "string",
+          "description": "Directory on the agent's disk where the project is located",
+          "required": true
+        },
+        {
+          "name": "instanceUrl",
+          "viewName": "Instance URL",
+          "type": "string",
+          "description": "Consumer Key of Connected Salesforce App"
+        },
+        {
+          "name": "testLevel",
+          "viewName": "Test level",
+          "description": "Tests' level to be run during the execution",
+          "type": "options",
+          "options": [
             {
-              "name": "username",
-              "viewName": "Username",
-              "type": "string",
-              "placeholder": "user@email.com",
-              "description": "User's email",
-              "required": true
+              "id": "noTests",
+              "name": "No test run"
             },
             {
-              "name": "consumerKey",
-              "viewName": "Consumer key",
-              "type": "vault",
-              "description": "Consumer Key of Connected Salesforce App",
-              "required": true
+              "id": "localTests",
+              "name": "Run local tests"
             },
             {
-              "name": "jwtKey",
-              "viewName": "JWT key",
-              "type": "vault",
-              "description": "JWT Secret file's content",
-              "required": true
-            },
-            {
-              "name": "sourceDirectory",
-              "viewName": "Source directory",
-              "type": "string",
-              "description": "Directory on the agent's disk where the project is located",
-              "required": true
-            },
-            {
-              "name": "instanceUrl",
-              "viewName": "Instance URL",
-              "type": "string",
-              "description": "Consumer Key of Connected Salesforce App"
-            },
-            {
-              "name": "testLevel",
-              "viewName": "Test level",
-              "description": "Tests' level to be run during the execution",
-              "type": "options",
-              "options": [
-                {
-                  "id": "noTests",
-                  "name": "No test run"
-                },
-                {
-                  "id": "localTests",
-                  "name": "Run local tests"
-                },
-                {
-                  "id": "allTests",
-                  "name": "Run all tests in org"
-                }
-              ]
+              "id": "allTests",
+              "name": "Run all tests in org"
             }
           ]
         }

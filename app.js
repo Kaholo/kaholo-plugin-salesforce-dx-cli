@@ -1,19 +1,51 @@
+const _ = require('lodash');
+
 const SFDX = require('./sfdx');
 
 function deployProject(action, settings) {
-  console.log("API DEPLOY", action, settings)
+  const {
+    consumerKey,
+    jwtKey,
+    username,
+    sourceDirectory,
+    instanceUrl,
+    testLevel
+  } = _.merge(action.params, settings);
+  console.log("App.deploy",action);
+/*  SFDX.authenticate({
+    consumerKey,
+    jwtKey,
+    username
+  });*/
 
-  SFDX.authenticate();
-
-  return SFDX.deployProject();
+  return SFDX.deployProject({
+    sourceDirectory,
+    instanceUrl,
+    testLevel
+  });
 }
 
 function validateProject(action, settings) {
-  console.log("API VALIDATE", action, settings)
+  const {
+    username,
+    consumerKey,
+    jwtKey,
+    sourceDirectory,
+    instanceUrl,
+    testLevel
+  } = _.merge(action.params, settings);
 
-  SFDX.authenticate();
+  /*SFDX.authenticate({
+    consumerKey,
+    jwtKey,
+    username
+  });*/
 
-  return SFDX.validateProject();
+  return SFDX.validateProject({
+    sourceDirectory,
+    instanceUrl,
+    testLevel
+  });
 }
 
 module.exports = {
