@@ -56,15 +56,15 @@
       "type": "options",
       "options": [
         {
-          "id": "noTests",
+          "id": "NoTestRun",
           "name": "No test run"
         },
         {
-          "id": "localTests",
+          "id": "RunLocalTests",
           "name": "Run local tests"
         },
         {
-          "id": "allTests",
+          "id": "RunAllTestsInOrg",
           "name": "Run all tests in org"
         }
       ]
@@ -117,15 +117,15 @@
           "type": "options",
           "options": [
             {
-              "id": "noTests",
+              "id": "NoTestRun",
               "name": "No test run"
             },
             {
-              "id": "localTests",
+              "id": "RunLocalTests",
               "name": "Run local tests"
             },
             {
-              "id": "allTests",
+              "id": "RunAllTestsInOrg",
               "name": "Run all tests in org"
             }
           ]
@@ -149,6 +149,7 @@
           "viewName": "Consumer key",
           "type": "vault",
           "description": "Consumer Key of Connected Salesforce App",
+          "placeholder": "3MvT9t2sl2P.pBypJj_igASDyuxNxWqH4JNZTo5G7o15aN3hq2Q8uM9f4i3aFof3cY8paJ1hp8wcVmVK0Bhs_",
           "required": true
         },
         {
@@ -162,14 +163,16 @@
           "name": "sourceDirectory",
           "viewName": "Source directory",
           "type": "string",
-          "description": "Directory on the agent's disk where the project is located",
+          "description": "Absolute directory on the agent's disk where the project is located",
+          "placeholder": "/home/username/Documents/salesforceProject",
           "required": true
         },
         {
           "name": "instanceUrl",
           "viewName": "Instance URL",
           "type": "string",
-          "description": "Consumer Key of Connected Salesforce App"
+          "description": "Salesforce APP instance URL",
+          "placeholder": "https://test.salesforce.com"
         },
         {
           "name": "testLevel",
@@ -178,15 +181,15 @@
           "type": "options",
           "options": [
             {
-              "id": "noTests",
+              "id": "NoTestRun",
               "name": "No test run"
             },
             {
-              "id": "localTests",
+              "id": "RunLocalTests",
               "name": "Run local tests"
             },
             {
-              "id": "allTests",
+              "id": "RunAllTestsInOrg",
               "name": "Run all tests in org"
             }
           ]

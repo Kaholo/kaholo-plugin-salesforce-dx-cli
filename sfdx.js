@@ -1,10 +1,11 @@
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-const os = require('os')
+
 const {
-    open: openFile,
-    unlink: deleteFile,
-} = require('fs/promises');
+    createJWTFile,
+    deleteJWTFile,
+    JWT_KEY_FILE_DIRECTORY
+} = require('./jwtFile');
 
 const CLI = 'sfdx';
 const COMMANDS = {
@@ -12,92 +13,109 @@ const COMMANDS = {
     DEPLOY: 'force:source:deploy',
 };
 
-const JWT_KEY_FILE_DIRECTORY = './.temp_jwtkey';
-
-const FILE_SYSTEM_FLAGS = 'ax'; // append and fail if file exists
-
-async function authenticate({ consumerKey, jwtKey, username, instanceUrl }) {
-    console.log("AUTHENTICATE", { consumerKey, jwtKey, username, instanceUrl });
-
-    let fileHandle;
+async function authenticate({ consumerKey, jwtKey, username, instanceUrl, sourceDirectory }) {
     try {
-        fileHandle = await openFile(JWT_KEY_FILE_DIRECTORY, FILE_SYSTEM_FLAGS);
-        await fileHandle.writeFile(jwtKey);
-
-        let params = `\
---clientid ${consumerKey} \
---jwtkeyfile ${JWT_KEY_FILE_DIRECTORY}
---username ${username}
-`;
-        if (instanceUrl) {
-            params += ` --instanceUrl ${instanceUrl}`;
-        }
-
-        const output = await exec(`${CLI} ${COMMANDS.AUTHENTICATE} ${params}`);
-        return output;
-
-    } catch (error) {
-        throw new SFDXError(`authentication failed: ${error}`);
-
+        await createJWTFile({
+            sourceDirectory,
+            jwtKey
+        });
+        await callAuthenticateCommand({
+            username,
+            consumerKey,
+            instanceUrl,
+            sourceDirectory
+        });
     } finally {
-        await fileHandle.close();
-        await deleteFile(fileHandle);
+        await deleteJWTFile({
+            sourceDirectory
+        });
     }
 }
 
 async function deployProject({
     sourceDirectory,
     testLevel,
+    username
 }) {
-    console.log("DEPLOY PROJECT", { sourceDirectory, testLevel })
-
-    /*return callDeployCommand({
+    return callDeployCommand({
         sourceDirectory,
         testLevel,
-    });*/
+        username
+    });
 }
 
 function validateProject({
-     sourceDirectory,
-     testLevel
+    sourceDirectory,
+    testLevel,
+    username
  }) {
-    console.log("VALIDATE PROJECT", { sourceDirectory, testLevel })
-
-    /*return callDeployCommand({
+    return callDeployCommand({
         sourceDirectory,
         testLevel,
+        username,
         extraParamsString: '--checkonly',
-    });*/
+    });
+}
+
+async function callAuthenticateCommand({ username, consumerKey, instanceUrl, sourceDirectory }) {
+    try {
+        let params = `\
+    --clientid ${consumerKey} \
+    --jwtkeyfile ${JWT_KEY_FILE_DIRECTORY} \
+    --username ${username}
+    `;
+        if (instanceUrl) {
+            params += ` --instanceUrl ${instanceUrl}`;
+        }
+
+        const output = await exec(
+            `${CLI} ${COMMANDS.AUTHENTICATE} ${params}`,
+            { cwd: sourceDirectory }
+        );
+
+        return output.stdout;
+    } catch (error) {
+        throw new SFDXError(`authentication failed: ${error}`);
+    }
 }
 
 async function callDeployCommand({
     sourceDirectory,
     testLevel,
+    username,
     extraParamsString
 }) {
     try {
-        let params = `-p ${sourceDirectory}`;
+        let params = `\
+-p ${sourceDirectory} \
+-u ${username}`;
+
         if (testLevel) {
-            params += ` --testLevel ${testLevel}`;
+            params += ` --testlevel ${testLevel}`;
         }
         if (extraParamsString) {
-            params += ' ' + extraParamsString;
+            params += ` ${extraParamsString}`;
         }
 
-        const output = await exec(`${CLI} ${COMMANDS.DEPLOY} ${params}`);
-        return output;
+        const output = await exec(
+            `${CLI} ${COMMANDS.DEPLOY} ${params}`,
+            { cwd: sourceDirectory }
+        );
+
+        return output.stdout;
     } catch (error) {
-        throw new SFDXError(`deployment failed: ${error}`);
+        const {stdout, stderr} = error;
+        throw new SFDXError(`deployment failed: ${error}. ${stdout}`);
     }
 }
 
 class SFDXError extends Error {
     constructor(message) {
-        super(`SFDX Error - ${message}`);
+        super(message);
     }
 
     toString() {
-        return this.message;
+        return `${this.message} ${this.stack}`;
     }
 }
 

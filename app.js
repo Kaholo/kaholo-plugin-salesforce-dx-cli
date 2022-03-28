@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const SFDX = require('./sfdx');
 
-function deployProject(action, settings) {
+async function deployProject(action, settings) {
   const {
     consumerKey,
     jwtKey,
@@ -10,22 +10,24 @@ function deployProject(action, settings) {
     sourceDirectory,
     instanceUrl,
     testLevel
-  } = _.merge(action.params, settings);
-  console.log("App.deploy",action);
-/*  SFDX.authenticate({
+  } = mergeInputs(action.params, settings);
+
+  await SFDX.authenticate({
     consumerKey,
     jwtKey,
-    username
-  });*/
+    username,
+    sourceDirectory
+  });
 
   return SFDX.deployProject({
     sourceDirectory,
     instanceUrl,
-    testLevel
+    testLevel,
+    username
   });
 }
 
-function validateProject(action, settings) {
+async function validateProject(action, settings) {
   const {
     username,
     consumerKey,
@@ -33,24 +35,50 @@ function validateProject(action, settings) {
     sourceDirectory,
     instanceUrl,
     testLevel
-  } = _.merge(action.params, settings);
+  } = mergeInputs(action.params, settings);
 
-  /*SFDX.authenticate({
+  await SFDX.authenticate({
     consumerKey,
     jwtKey,
-    username
-  });*/
+    username,
+    sourceDirectory
+  });
 
   return SFDX.validateProject({
     sourceDirectory,
     instanceUrl,
-    testLevel
+    testLevel,
+    username
   });
 }
 
+function mergeInputs(params, settings) {
+  const inputs = {};
+
+  _.mergeWith(
+      inputs,
+      params,
+      settings,
+      (destinationValue, sourceValue) => (
+          !sourceValue && destinationValue ? destinationValue : sourceValue
+      ));
+
+  return inputs;
+}
+
+function errorHandler(fn) {
+  return (...args) => {
+    try {
+      return fn(...args);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
 module.exports = {
-  deployProject,
-  validateProject
+  deployProject: errorHandler(deployProject),
+  validateProject: errorHandler(validateProject),
 };
 
 
