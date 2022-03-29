@@ -34,18 +34,6 @@ async function authenticate({
   }
 }
 
-async function deployProject({
-  sourceDirectory,
-  testLevel,
-  username,
-}) {
-  return callDeployCommand({
-    sourceDirectory,
-    testLevel,
-    username,
-  });
-}
-
 function validateProject({
   sourceDirectory,
   testLevel,
@@ -62,16 +50,16 @@ function validateProject({
 async function callAuthenticateCommand({
   username, consumerKey, instanceUrl, sourceDirectory,
 }) {
-  try {
-    let params = `\
+  let params = `\
     --clientid ${consumerKey} \
     --jwtkeyfile ${JWT_KEY_FILE_DIRECTORY} \
-    --username ${username}
-    `;
-    if (instanceUrl) {
-      params += ` --instanceUrl ${instanceUrl}`;
-    }
+    --username ${username}`;
 
+  if (instanceUrl) {
+    params += ` --instanceUrl ${instanceUrl}`;
+  }
+
+  try {
     const output = await exec(
       `${CLI} ${COMMANDS.AUTHENTICATE} ${params}`,
       { cwd: sourceDirectory },
@@ -89,18 +77,18 @@ async function callDeployCommand({
   username,
   extraParamsString,
 }) {
-  try {
-    let params = `\
+  let params = `\
 -p ${sourceDirectory} \
 -u ${username}`;
 
-    if (testLevel) {
-      params += ` --testlevel ${testLevel}`;
-    }
-    if (extraParamsString) {
-      params += ` ${extraParamsString}`;
-    }
+  if (testLevel) {
+    params += ` --testlevel ${testLevel}`;
+  }
+  if (extraParamsString) {
+    params += ` ${extraParamsString}`;
+  }
 
+  try {
     const output = await exec(
       `${CLI} ${COMMANDS.DEPLOY} ${params}`,
       { cwd: sourceDirectory },
@@ -121,6 +109,6 @@ class SFDXError extends Error {
 
 module.exports = {
   authenticate,
-  deployProject,
+  deployProject: callDeployCommand,
   validateProject,
 };

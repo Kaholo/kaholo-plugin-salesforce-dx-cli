@@ -1,6 +1,8 @@
-const _ = require("lodash");
-
 const SFDX = require("./sfdx");
+const {
+  mergeInputs,
+  errorHandler,
+} = require("./utils");
 
 async function deployProject(action, settings) {
   const {
@@ -50,32 +52,6 @@ async function validateProject(action, settings) {
     testLevel,
     username,
   });
-}
-
-function mergeInputs(params, settings) {
-  const inputs = {};
-
-  _.mergeWith(
-    inputs,
-    params,
-    settings,
-    (destinationValue, sourceValue) => (
-      !sourceValue && destinationValue ? destinationValue : sourceValue
-    ),
-  );
-
-  return inputs;
-}
-
-function errorHandler(fn) {
-  return (...args) => {
-    try {
-      return fn(...args);
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  };
 }
 
 module.exports = {
