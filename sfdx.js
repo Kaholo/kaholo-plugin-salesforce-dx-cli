@@ -14,7 +14,7 @@ const COMMANDS = {
 };
 
 async function authenticate({
-  consumerKey, jwtKey, username, instanceUrl, sourceDirectory,
+  consumerKey, jwtKey, username, instanceUrl, sourceDirectory, outputJson,
 }) {
   try {
     await createJWTFile({
@@ -26,6 +26,7 @@ async function authenticate({
       consumerKey,
       instanceUrl,
       sourceDirectory,
+      outputJson,
     });
   } finally {
     await deleteJWTFile({
@@ -38,23 +39,28 @@ function validateProject({
   sourceDirectory,
   testLevel,
   username,
+  outputJson,
 }) {
   return callDeployCommand({
     sourceDirectory,
     testLevel,
     username,
+    outputJson,
     extraParamsString: "--checkonly",
   });
 }
 
 async function callAuthenticateCommand({
-  username, consumerKey, instanceUrl, sourceDirectory,
+  username, consumerKey, instanceUrl, sourceDirectory, outputJson,
 }) {
   let params = `\
-    --clientid ${consumerKey} \
-    --jwtkeyfile ${JWT_KEY_FILE_DIRECTORY} \
-    --username ${username}`;
+--clientid ${consumerKey} \
+--jwtkeyfile ${JWT_KEY_FILE_DIRECTORY} \
+--username ${username}`;
 
+  if (outputJson) {
+    params += " --json";
+  }
   if (instanceUrl) {
     params += ` --instanceUrl ${instanceUrl}`;
   }
@@ -75,12 +81,16 @@ async function callDeployCommand({
   sourceDirectory,
   testLevel,
   username,
+  outputJson,
   extraParamsString,
 }) {
   let params = `\
 -p ${sourceDirectory} \
 -u ${username}`;
 
+  if (outputJson) {
+    params += " --json";
+  }
   if (testLevel) {
     params += ` --testlevel ${testLevel}`;
   }
