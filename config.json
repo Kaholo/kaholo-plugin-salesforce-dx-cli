@@ -4,7 +4,7 @@
   "execProgram": "node",
   "main": "app.js",
   "imgUrl": "logo.png",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "description": "Integration with SalesForce SFDX CLI.",
   "category": "CRM",
   "keywords": [
@@ -129,6 +129,12 @@
               "name": "Run all tests in org"
             }
           ]
+        },
+        {
+          "name": "outputJson",
+          "viewName": "Output JSON",
+          "description": "Display the output in a JSON format including all the details",
+          "type": "boolean"
         }
       ]
     },
@@ -193,6 +199,12 @@
               "name": "Run all tests in org"
             }
           ]
+        },
+        {
+          "name": "outputJson",
+          "viewName": "Output JSON",
+          "description": "Display the output in a JSON format including all the details",
+          "type": "boolean"
         }
       ]
     }

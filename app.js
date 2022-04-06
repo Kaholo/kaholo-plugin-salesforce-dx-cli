@@ -12,20 +12,23 @@ async function deployProject(action, settings) {
     sourceDirectory,
     instanceUrl,
     testLevel,
+    outputJson,
   } = mergeInputs(action.params, settings);
 
   await SFDX.authenticate({
     consumerKey,
     jwtKey,
     username,
+    instanceUrl,
     sourceDirectory,
+    outputJson,
   });
 
   return SFDX.deployProject({
     sourceDirectory,
-    instanceUrl,
     testLevel,
     username,
+    outputJson,
   });
 }
 
@@ -37,20 +40,23 @@ async function validateProject(action, settings) {
     sourceDirectory,
     instanceUrl,
     testLevel,
+    outputJson,
   } = mergeInputs(action.params, settings);
 
   await SFDX.authenticate({
     consumerKey,
     jwtKey,
     username,
+    instanceUrl,
     sourceDirectory,
+    outputJson,
   });
 
   return SFDX.validateProject({
     sourceDirectory,
-    instanceUrl,
     testLevel,
     username,
+    outputJson,
   });
 }
 
