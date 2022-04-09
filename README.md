@@ -1,2 +1,2 @@
-# kaholo-plugin-template
-A template repository for Kaholo plugins.
+# kaholo-plugin-salesforce-dx-cli
+A Kaholo plugin to access Salesforce DX CLI.

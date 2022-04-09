@@ -1,20 +1,3 @@
-const _ = require("lodash");
-
-function mergeInputs(params, settings) {
-  const inputs = {};
-
-  _.mergeWith(
-    inputs,
-    params,
-    settings,
-    (destinationValue, sourceValue) => (
-      !sourceValue && destinationValue ? destinationValue : sourceValue
-    ),
-  );
-
-  return inputs;
-}
-
 function errorHandler(fn) {
   return (...args) => {
     try {
@@ -26,7 +9,15 @@ function errorHandler(fn) {
   };
 }
 
+function getCredentials(parameters) {
+  return {
+    SFDX_KEY: parameters.jwtKey,
+    SFDX_USERNAME: parameters.username,
+    SFDX_CLIENT_ID: parameters.consumerKey,
+  };
+}
+
 module.exports = {
-  mergeInputs,
   errorHandler,
+  getCredentials,
 };

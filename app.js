@@ -1,66 +1,56 @@
+const kaholo = require("kaholo-plugin-library");
 const SFDX = require("./sfdx");
-const {
-  mergeInputs,
-  errorHandler,
-} = require("./utils");
+const utils = require("./utils");
 
-async function deployProject(action, settings) {
+async function deployProject(parameters) {
   const {
-    consumerKey,
-    jwtKey,
-    username,
     sourceDirectory,
-    instanceUrl,
     testLevel,
     outputJson,
-  } = mergeInputs(action.params, settings);
+  } = parameters;
 
-  await SFDX.authenticate({
-    consumerKey,
-    jwtKey,
-    username,
-    instanceUrl,
-    sourceDirectory,
-    outputJson,
-  });
+  const credentials = utils.getCredentials(parameters);
 
   return SFDX.deployProject({
+    credentials,
     sourceDirectory,
     testLevel,
-    username,
     outputJson,
   });
 }
 
-async function validateProject(action, settings) {
+async function validateProject(parameters) {
   const {
-    username,
-    consumerKey,
-    jwtKey,
     sourceDirectory,
-    instanceUrl,
     testLevel,
     outputJson,
-  } = mergeInputs(action.params, settings);
+  } = parameters;
 
-  await SFDX.authenticate({
-    consumerKey,
-    jwtKey,
-    username,
-    instanceUrl,
-    sourceDirectory,
-    outputJson,
-  });
+  const credentials = utils.getCredentials(parameters);
 
   return SFDX.validateProject({
+    credentials,
     sourceDirectory,
     testLevel,
-    username,
     outputJson,
   });
+}
+
+async function runCommand(parameters) {
+  const credentials = utils.getCredentials(parameters);
+
+  try {
+    const output = await SFDX.execute(credentials, parameters.command);
+    return output.stdout;
+  } catch (error) {
+    throw new SFDX.SFDXError(`deployment failed: ${error.stderr}`);
+  }
 }
 
 module.exports = {
-  deployProject: errorHandler(deployProject),
-  validateProject: errorHandler(validateProject),
+  ...kaholo.bootstrap({
+    runCommand: utils.errorHandler(runCommand),
+    deployProject: utils.errorHandler(deployProject),
+    validateProject: utils.errorHandler(validateProject),
+  }, {}),
 };
