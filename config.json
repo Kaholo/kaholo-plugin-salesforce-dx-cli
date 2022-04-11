@@ -241,6 +241,12 @@
           "type": "string",
           "description": "SFDX command to be executed",
           "required": true
+        },
+        {
+          "name": "outputJson",
+          "viewName": "Output JSON",
+          "description": "Display the output in a JSON format including all the details",
+          "type": "boolean"
         }
       ]
     }

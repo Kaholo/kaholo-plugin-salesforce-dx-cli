@@ -39,18 +39,15 @@ async function validateProject(parameters) {
 async function runCommand(parameters) {
   const credentials = utils.getCredentials(parameters);
 
-  try {
-    const output = await SFDX.execute(credentials, parameters.command);
-    return output.stdout;
-  } catch (error) {
-    throw new SFDX.SFDXError(`deployment failed: ${error.stderr}`);
-  }
+  return SFDX.runCommand({
+    credentials,
+    command: parameters.command,
+    outputJson: parameters.outputJson,
+  });
 }
 
-module.exports = {
-  ...kaholo.bootstrap({
-    runCommand: utils.errorHandler(runCommand),
-    deployProject: utils.errorHandler(deployProject),
-    validateProject: utils.errorHandler(validateProject),
-  }, {}),
-};
+module.exports = kaholo.bootstrap({
+  runCommand: utils.errorHandler(runCommand),
+  deployProject: utils.errorHandler(deployProject),
+  validateProject: utils.errorHandler(validateProject),
+}, {});

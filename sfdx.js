@@ -24,6 +24,7 @@ docker run \
 -e SFDX_AUTH_COMMAND \
 -e SANITIZED_COMMAND \
 -e PROJECT_PATH \
+-e SFDX_JSON_TO_STDOUT=true \
 -v $PROJECT_PATH:/project \
 -w /project \
 --rm salesforce/salesforcedx:latest-full  \
@@ -85,25 +86,59 @@ async function callDeployCommand({
     params += ` ${extraParamsString}`;
   }
 
-  try {
-    const output = await execute(credentials, `${COMMANDS.DEPLOY} ${params}`, sourceDirectory);
-    return output.stdout;
-  } catch (error) {
-    const { stdout } = error;
-    throw new SFDXError(`deployment failed: ${stdout}`);
+  return execute(credentials, `${COMMANDS.DEPLOY} ${params}`, sourceDirectory);
+}
+
+async function runCommand({
+  credentials,
+  command,
+  outputJson,
+}) {
+  let params = "";
+  if (outputJson) {
+    params += " --json";
   }
+
+  return execute(credentials, `${command} ${params}`);
+}
+
+function formatOutput(output) {
+  let { stderr, stdout } = output;
+
+  try {
+    stdout = JSON.parse(stdout);
+    stderr = JSON.parse(stderr);
+  } catch (error) {
+    // do nothing
+  }
+
+  if (stderr && !stdout) {
+    throw new SFDXError(`Command failed: ${stderr}`);
+  }
+
+  return {
+    stderr,
+    stdout,
+  };
 }
 
 async function execute(credentials, command, projectPath) {
-  return exec(DOCKER_SFDX_CLI_COMMAND, {
-    env: {
-      ...credentials,
-      SFDX_AUTH_COMMAND,
-      RAW_COMMAND: command,
-      SANITIZED_COMMAND: sanitizeCommand(command),
-      PROJECT_PATH: projectPath,
-    },
-  });
+  let output;
+  try {
+    output = await exec(DOCKER_SFDX_CLI_COMMAND, {
+      env: {
+        ...credentials,
+        SFDX_AUTH_COMMAND,
+        RAW_COMMAND: command,
+        SANITIZED_COMMAND: sanitizeCommand(command),
+        PROJECT_PATH: projectPath,
+      },
+    });
+  } catch (error) {
+    throw new SFDXError(`Command failed: ${error.stderr}`);
+  }
+
+  return formatOutput(output);
 }
 
 class SFDXError extends Error {
@@ -113,8 +148,7 @@ class SFDXError extends Error {
 }
 
 module.exports = {
-  execute,
   deployProject: callDeployCommand,
   validateProject,
-  SFDXError,
+  runCommand,
 };
