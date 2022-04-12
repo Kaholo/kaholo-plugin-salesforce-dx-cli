@@ -47,7 +47,7 @@ async function runCommand(parameters) {
 }
 
 module.exports = kaholo.bootstrap({
-  runCommand: utils.errorHandler(runCommand),
-  deployProject: utils.errorHandler(deployProject),
-  validateProject: utils.errorHandler(validateProject),
+  runCommand,
+  deployProject,
+  validateProject,
 }, {});

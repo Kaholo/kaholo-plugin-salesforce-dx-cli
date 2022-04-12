@@ -24,7 +24,6 @@ docker run \
 -e SFDX_AUTH_COMMAND \
 -e SANITIZED_COMMAND \
 -e PROJECT_PATH \
--e SFDX_JSON_TO_STDOUT=true \
 -v $PROJECT_PATH:/project \
 -w /project \
 --rm salesforce/salesforcedx:latest-full  \
