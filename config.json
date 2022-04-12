@@ -4,7 +4,7 @@
   "execProgram": "node",
   "main": "app.js",
   "imgUrl": "logo.png",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Integration with SalesForce SFDX CLI.",
   "category": "CRM",
   "keywords": [
@@ -199,6 +199,48 @@
               "name": "Run all tests in org"
             }
           ]
+        },
+        {
+          "name": "outputJson",
+          "viewName": "Output JSON",
+          "description": "Display the output in a JSON format including all the details",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "runCommand",
+      "viewName": "Run Command",
+      "params": [
+        {
+          "name": "username",
+          "viewName": "Username",
+          "type": "string",
+          "placeholder": "user@email.com",
+          "description": "User's email",
+          "required": true
+        },
+        {
+          "name": "consumerKey",
+          "viewName": "Consumer key",
+          "type": "vault",
+          "description": "Consumer Key of Connected Salesforce App",
+          "placeholder": "3MvT9t2sl2P.pBypJj_igASDyuxNxWqH4JNZTo5G7o15aN3hq2Q8uM9f4i3aFof3cY8paJ1hp8wcVmVK0Bhs_",
+          "required": true
+        },
+        {
+          "name": "jwtKey",
+          "viewName": "JWT key",
+          "type": "vault",
+          "description": "JWT Secret file's content",
+          "required": true
+        },
+        {
+          "name": "command",
+          "viewName": "Command",
+          "type": "string",
+          "description": "SFDX command to be executed",
+          "required": true
         },
         {
           "name": "outputJson",
