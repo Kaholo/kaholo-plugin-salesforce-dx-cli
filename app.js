@@ -1,4 +1,4 @@
-const kaholo = require("kaholo-plugin-library");
+const kaholo = require("@kaholo/plugin-library");
 const SFDX = require("./sfdx");
 const utils = require("./utils");
 
